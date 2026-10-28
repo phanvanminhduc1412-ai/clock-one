@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="anime" data-scheme="light" data-effects="full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#ffd1e8">
+<title>Count Timer · Đếm thời gian thật dễ thương</title> 
+<link rel="icon" type="image/png" href="logo.image"> 
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:var(--text);
+  background:var(--bg);
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .55s ease,color .4s ease;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+[hidden]{display:none !important;}
+button{font-family:inherit;}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px;}
+
+/* ============================================================
+   THEME VARIABLES
+   ============================================================ */
+html[data-theme="anime"]{
+  --font:'Comic Sans MS','Chalkboard SE','Segoe UI',system-ui,sans-serif;
+  --display-font:'Comic Sans MS','Chalkboard SE','Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(160deg,#ffe3f1 0%,#ffd1e8 45%,#fff2f8 100%);
+  --text:#7a3b5c; --muted:#b57a99;
+  --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.94);
+  --border:rgba(255,120,176,.25);
+  --accent:#ff77b0; --accent-2:#ffc94d; --ring-track:rgba(255,120,176,.18);
+  --radius:26px;
+  --clock-bg:radial-gradient(circle at 32% 24%,#ffffff 0%,#ffe4f2 42%,#ffbcdd 100%);
+  --clock-shadow:0 20px 45px rgba(255,110,170,.35),inset 0 -14px 28px rgba(255,150,200,.45),inset 0 12px 24px rgba(255,255,255,.95);
+  --time-shadow:0 2px 0 rgba(255,255,255,.85);
+  --btn-bg:linear-gradient(180deg,#ffffff,#ffe7f3); --btn-text:#a34a78;
+  --btn-shadow:0 6px 0 #ffc0dd,0 12px 20px rgba(255,120,176,.28);
+  --btn-shadow-active:0 2px 0 #ffc0dd,0 4px 10px rgba(255,120,176,.25);
+  --primary-bg:linear-gradient(180deg,#ff9ecb,#ff6fae); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #d94f8c,0 14px 24px rgba(255,110,170,.4);
+  --primary-shadow-active:0 2px 0 #d94f8c,0 6px 12px rgba(255,110,170,.35);
+}
+html[data-theme="pastel"]{
+  --font:'Quicksand','Nunito','Segoe UI',system-ui,sans-serif;
+  --display-font:'Quicksand','Nunito','Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(150deg,#e8f7ff 0%,#f3e8ff 45%,#e6fff4 100%);
+  --text:#5b4b73; --muted:#9b8fae;
+  --surface:rgba(255,255,255,.75); --surface-2:rgba(255,255,255,.95);
+  --border:rgba(155,140,255,.22);
+  --accent:#9b8cff; --accent-2:#7fe0c0; --ring-track:rgba(155,140,255,.16);
+  --radius:24px;
+  --clock-bg:radial-gradient(circle at 34% 26%,#ffffff,#eef0ff 45%,#dcd9ff 100%);
+  --clock-shadow:0 18px 40px rgba(150,140,255,.28),inset 0 -12px 26px rgba(190,190,255,.35),inset 0 12px 24px #fff;
+  --time-shadow:0 2px 0 #fff;
+  --btn-bg:linear-gradient(180deg,#fff,#f1eeff); --btn-text:#6a5f96;
+  --btn-shadow:0 6px 0 #dcd6ff,0 12px 20px rgba(150,140,255,.25);
+  --btn-shadow-active:0 2px 0 #dcd6ff,0 4px 10px rgba(150,140,255,.2);
+  --primary-bg:linear-gradient(180deg,#b3a6ff,#8f7dff); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #6a58d6,0 14px 24px rgba(140,125,255,.4);
+  --primary-shadow-active:0 2px 0 #6a58d6,0 6px 12px rgba(140,125,255,.35);
+}
+html[data-theme="ghibli"]{
+  --font:'Segoe UI',system-ui,sans-serif;
+  --display-font:'Hiragino Mincho ProN','Yu Mincho',Georgia,'Times New Roman',serif;
+  --bg:linear-gradient(180deg,#bfe6f5 0%,#d9f0e2 50%,#f7f1d8 100%);
+  --text:#2f4a3a; --muted:#6b8a76;
+  --surface:rgba(255,255,255,.66); --surface-2:rgba(255,255,255,.9);
+  --border:rgba(79,143,106,.25);
+  --accent:#4f8f6a; --accent-2:#e8b04b; --ring-track:rgba(79,143,106,.18);
+  --radius:20px;
+  --clock-bg:radial-gradient(circle at 30% 22%,#ffffff,#f2f7e4 42%,#cfe6c9 100%);
+  --clock-shadow:0 18px 40px rgba(79,143,106,.25),inset 0 -12px 26px rgba(160,200,160,.4),inset 0 12px 26px #fff;
+  --time-shadow:0 1px 0 rgba(255,255,255,.9);
+  --btn-bg:linear-gradient(180deg,#fdfff8,#e6f0dc); --btn-text:#3d6a4d;
+  --btn-shadow:0 6px 0 #c3d9b8,0 12px 20px rgba(79,143,106,.22);
+  --btn-shadow-active:0 2px 0 #c3d9b8,0 4px 10px rgba(79,143,106,.18);
+  --primary-bg:linear-gradient(180deg,#6fb98a,#4f8f6a); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #3a6c4f,0 14px 24px rgba(79,143,106,.35);
+  --primary-shadow-active:0 2px 0 #3a6c4f,0 6px 12px rgba(79,143,106,.3);
+}
+html[data-theme="cyber"]{
+  --font:'Courier New',ui-monospace,monospace;
+  --display-font:'Courier New',ui-monospace,monospace;
+  --bg:linear-gradient(160deg,#eef2ff 0%,#e2e9ff 45%,#f8e9ff 100%);
+  --text:#231a4a; --muted:#6a5fa0;
+  --surface:rgba(255,255,255,.7); --surface-2:rgba(255,255,255,.94);
+  --border:rgba(0,200,224,.4);
+  --accent:#00c8e0; --accent-2:#ff2bd6; --ring-track:rgba(0,200,224,.18);
+  --radius:8px;
+  --clock-bg:linear-gradient(145deg,#ffffff,#e8fbff 50%,#ffe8fb 100%);
+  --clock-shadow:0 0 0 2px rgba(0,200,224,.5),0 18px 40px rgba(0,200,224,.25),inset 0 0 34px rgba(255,43,214,.12);
+  --time-shadow:0 0 12px rgba(0,200,224,.55);
+  --btn-bg:linear-gradient(180deg,#fff,#eafcff); --btn-text:#0a6c7d;
+  --btn-shadow:0 5px 0 #9fe4ef,0 12px 20px rgba(0,200,224,.25);
+  --btn-shadow-active:0 2px 0 #9fe4ef,0 4px 10px rgba(0,200,224,.2);
+  --primary-bg:linear-gradient(180deg,#3ef0ff,#00c8e0); --primary-text:#04202b;
+  --primary-shadow:0 5px 0 #00849a,0 14px 24px rgba(0,200,224,.4);
+  --primary-shadow-active:0 2px 0 #00849a,0 6px 12px rgba(0,200,224,.35);
+}
+html[data-theme="galaxy"]{
+  --font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --display-font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(160deg,#f0e9ff 0%,#e3e8ff 50%,#f7e9ff 100%);
+  --text:#33265c; --muted:#7a6ba8;
+  --surface:rgba(255,255,255,.7); --surface-2:rgba(255,255,255,.94);
+  --border:rgba(139,92,246,.3);
+  --accent:#8b5cf6; --accent-2:#22c9e0; --ring-track:rgba(139,92,246,.16);
+  --radius:28px;
+  --clock-bg:radial-gradient(circle at 30% 25%,#ffffff,#efe6ff 45%,#d9c9ff 100%);
+  --clock-shadow:0 18px 45px rgba(139,92,246,.3),inset 0 -12px 26px rgba(190,160,255,.4),inset 0 12px 24px #fff;
+  --time-shadow:0 2px 0 #fff;
+  --btn-bg:linear-gradient(180deg,#fff,#f2ecff); --btn-text:#5c4a94;
+  --btn-shadow:0 6px 0 #ddd0ff,0 12px 20px rgba(139,92,246,.25);
+  --btn-shadow-active:0 2px 0 #ddd0ff,0 4px 10px rgba(139,92,246,.2);
+  --primary-bg:linear-gradient(180deg,#a98bff,#7c4dff); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #5b32c4,0 14px 24px rgba(139,92,246,.42);
+  --primary-shadow-active:0 2px 0 #5b32c4,0 6px 12px rgba(139,92,246,.36);
+}
+html[data-theme="cafe"]{
+  --font:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --display-font:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --bg:linear-gradient(160deg,#f9f0e0 0%,#f0dfc4 50%,#e8d4b4 100%);
+  --text:#4a3426; --muted:#8f7358;
+  --surface:rgba(255,252,245,.8); --surface-2:rgba(255,252,245,.96);
+  --border:rgba(140,100,60,.22);
+  --accent:#b5773f; --accent-2:#c9a227; --ring-track:rgba(140,100,60,.16);
+  --radius:20px;
+  --clock-bg:radial-gradient(circle at 32% 24%,#fffdf8,#f7ead4 45%,#e2c9a4 100%);
+  --clock-shadow:0 18px 40px rgba(120,85,45,.3),inset 0 -12px 26px rgba(190,150,105,.4),inset 0 12px 26px #fffdf8;
+  --time-shadow:0 1px 0 rgba(255,255,255,.9);
+  --btn-bg:linear-gradient(180deg,#fffdf7,#f2e3cb); --btn-text:#6d4a2c;
+  --btn-shadow:0 6px 0 #ddc4a2,0 12px 20px rgba(140,100,60,.24);
+  --btn-shadow-active:0 2px 0 #ddc4a2,0 4px 10px rgba(140,100,60,.2);
+  --primary-bg:linear-gradient(180deg,#c98c52,#a4692f); --primary-text:#fff8ec;
+  --primary-shadow:0 6px 0 #7e4d1f,0 14px 24px rgba(140,95,50,.4);
+  --primary-shadow-active:0 2px 0 #7e4d1f,0 6px 12px rgba(140,95,50,.35);
+}
+html[data-theme="y2k"]{
+  --font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --display-font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(135deg,#ffe9f7 0%,#dff4ff 45%,#f6ffe9 100%);
+  --text:#3a2b58; --muted:#8a7bb0;
+  --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.94);
+  --border:rgba(255,62,165,.28);
+  --accent:#ff3ea5; --accent-2:#00d4ff; --ring-track:rgba(255,62,165,.16);
+  --radius:22px;
+  --clock-bg:linear-gradient(145deg,#ffffff,#eafaff 40%,#ffe4f5 75%,#f2ffd9 100%);
+  --clock-shadow:0 18px 42px rgba(255,62,165,.28),inset 0 -12px 26px rgba(190,220,255,.5),inset 0 12px 26px #fff;
+  --time-shadow:0 2px 0 #fff,0 0 14px rgba(255,62,165,.35);
+  --btn-bg:linear-gradient(180deg,#fff,#eafaff); --btn-text:#a3286d;
+  --btn-shadow:0 6px 0 #ffc2e2,0 12px 20px rgba(255,62,165,.25);
+  --btn-shadow-active:0 2px 0 #ffc2e2,0 4px 10px rgba(255,62,165,.2);
+  --primary-bg:linear-gradient(180deg,#ff7cc0,#ff3ea5); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #c11f7a,0 14px 24px rgba(255,62,165,.42);
+  --primary-shadow-active:0 2px 0 #c11f7a,0 6px 12px rgba(255,62,165,.36);
+}
+html[data-theme="ocean"]{
+  --font:'Segoe UI',system-ui,sans-serif;
+  --display-font:'Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(180deg,#e6f8ff 0%,#c3ecff 40%,#9edcf5 75%,#7fcbe8 100%);
+  --text:#0b3c5d; --muted:#4a83a3;
+  --surface:rgba(255,255,255,.68); --surface-2:rgba(255,255,255,.93);
+  --border:rgba(27,143,209,.28);
+  --accent:#1b8fd1; --accent-2:#37d6b0; --ring-track:rgba(27,143,209,.16);
+  --radius:26px;
+  --clock-bg:radial-gradient(circle at 32% 24%,#ffffff,#e4f7ff 42%,#a9ddf5 100%);
+  --clock-shadow:0 18px 42px rgba(27,143,209,.3),inset 0 -12px 26px rgba(120,200,235,.45),inset 0 12px 26px #fff;
+  --time-shadow:0 2px 0 rgba(255,255,255,.85);
+  --btn-bg:linear-gradient(180deg,#fff,#e3f6ff); --btn-text:#116a94;
+  --btn-shadow:0 6px 0 #b7e2f2,0 12px 20px rgba(27,143,209,.24);
+  --btn-shadow-active:0 2px 0 #b7e2f2,0 4px 10px rgba(27,143,209,.2);
+  --primary-bg:linear-gradient(180deg,#48b6e8,#1b8fd1); --primary-text:#fff;
+  --primary-shadow:0 6px 0 #106b9e,0 14px 24px rgba(27,143,209,.42);
+  --primary-shadow-active:0 2px 0 #106b9e,0 6px 12px rgba(27,143,209,.36);
+}
+html[data-theme="academia"]{
+  --font:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --display-font:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --bg:linear-gradient(160deg,#f6efe0 0%,#eee2cc 50%,#e2d3b6 100%);
+  --text:#3d2f20; --muted:#86705a;
+  --surface:rgba(255,252,244,.8); --surface-2:rgba(255,252,244,.96);
+  --border:rgba(120,90,50,.25);
+  --accent:#8a6b2f; --accent-2:#b08a3c; --ring-track:rgba(120,90,50,.18);
+  --radius:6px;
+  --clock-bg:radial-gradient(circle at 30% 22%,#fffdf7,#f3e8d2 45%,#dcc8a4 100%);
+  --clock-shadow:0 16px 36px rgba(90,65,35,.32),inset 0 -10px 22px rgba(170,140,95,.4),inset 0 10px 22px #fffdf7;
+  --time-shadow:0 1px 0 rgba(255,255,255,.85);
+  --btn-bg:linear-gradient(180deg,#fffdf6,#efe2c9); --btn-text:#5b4426;
+  --btn-shadow:0 5px 0 #d6c2a0,0 12px 20px rgba(120,90,50,.24);
+  --btn-shadow-active:0 2px 0 #d6c2a0,0 4px 10px rgba(120,90,50,.2);
+  --primary-bg:linear-gradient(180deg,#a98a4b,#7e6230); --primary-text:#fdf8ec;
+  --primary-shadow:0 5px 0 #57431d,0 14px 24px rgba(100,75,35,.42);
+  --primary-shadow-active:0 2px 0 #57431d,0 6px 12px rgba(100,75,35,.36);
+}
+html[data-theme="jelly"]{
+  --font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --display-font:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --bg:linear-gradient(140deg,#ffe7f2 0%,#e0f0ff 45%,#e8ffe9 100%);
+  --text:#3a2b4d; --muted:#8b7ba8;
+  --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.95);
+  --border:rgba(255,95,162,.25);
+  --accent:#ff5fa2; --accent-2:#48e0b0; --ring-track:rgba(255,95,162,.16);
+  --radius:40px;
+  --clock-bg:radial-gradient(circle at 34% 22%,#ffffff 0%,#ffd9ea 40%,#ff9ec8 78%,#ff7eb8 100%);
+  --clock-shadow:0 24px 50px rgba(255,95,162,.35),inset 0 -18px 34px rgba(255,140,190,.55),inset 0 16px 30px rgba(255,255,255,.95);
+  --time-shadow:0 3px 0 rgba(255,255,255,.9),0 8px 16px rgba(200,60,120,.25);
+  --btn-bg:linear-gradient(180deg,#ffffff,#ffe9f3); --btn-text:#b8407a;
+  --btn-shadow:0 8px 0 #ffb9d6,0 16px 26px rgba(255,95,162,.3);
+  --btn-shadow-active:0 3px 0 #ffb9d6,0 6px 12px rgba(255,95,162,.25);
+  --primary-bg:linear-gradient(180deg,#ff8fc0,#ff4f97); --primary-text:#fff;
+  --primary-shadow:0 8px 0 #cf2f72,0 18px 30px rgba(255,95,162,.45);
+  --primary-shadow-active:0 3px 0 #cf2f72,0 8px 14px rgba(255,95,162,.4);
+}
+
+/* ---------- GENERIC DARK SCHEME ---------- */
+html[data-scheme="dark"]{
+  --text:#eae7f5;
+  --muted:#9a94b3;
+  --surface:rgba(255,255,255,.07);
+  --surface-2:rgba(255,255,255,.13);
+  --border:rgba(255,255,255,.14);
+  --ring-track:rgba(255,255,255,.12);
+  --clock-bg:radial-gradient(circle at 32% 24%,rgba(255,255,255,.20),rgba(255,255,255,.04) 72%);
+  --clock-shadow:0 22px 48px rgba(0,0,0,.6),inset 0 -14px 28px rgba(0,0,0,.45),inset 0 12px 24px rgba(255,255,255,.14);
+  --time-shadow:0 2px 14px rgba(0,0,0,.6);
+  --btn-bg:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.06));
+  --btn-text:#f2eefc;
+  --btn-shadow:0 6px 0 rgba(0,0,0,.5),0 12px 22px rgba(0,0,0,.45);
+  --btn-shadow-active:0 2px 0 rgba(0,0,0,.5),0 6px 12px rgba(0,0,0,.4);
+}
+html[data-theme="anime"][data-scheme="dark"]{--bg:linear-gradient(160deg,#2a1522 0%,#3a1c2e 50%,#1c1018 100%);}
+html[data-theme="pastel"][data-scheme="dark"]{--bg:linear-gradient(150deg,#1a1b2e 0%,#221a33 50%,#152428 100%);}
+html[data-theme="ghibli"][data-scheme="dark"]{--bg:linear-gradient(180deg,#0e1a22 0%,#132420 55%,#1c1a12 100%);--accent:#7fc79b;--accent-2:#e8c06b;}
+html[data-theme="cyber"][data-scheme="dark"]{--bg:radial-gradient(circle at 20% 8%,#1b0b2e 0%,#05030d 72%);--text:#d8f6ff;--muted:#7fa6c4;--accent:#00f0ff;--accent-2:#ff2bd6;--clock-shadow:0 0 0 2px rgba(0,240,255,.55),0 0 45px rgba(0,240,255,.35),0 0 80px rgba(255,43,214,.25),inset 0 0 40px rgba(0,240,255,.15);}
+html[data-theme="galaxy"][data-scheme="dark"]{--bg:radial-gradient(ellipse at 50% 0%,#2a1a5e 0%,#120a2e 55%,#0b0620 100%);--text:#e8e2ff;--muted:#a396d6;--accent:#b388ff;--accent-2:#6ee7ff;}
+html[data-theme="cafe"][data-scheme="dark"]{--bg:linear-gradient(160deg,#241a12 0%,#2f2216 55%,#1b1310 100%);--text:#f0e2cd;--muted:#b39a7c;--accent:#d99b5f;--accent-2:#e0be5c;}
+html[data-theme="y2k"][data-scheme="dark"]{--bg:linear-gradient(135deg,#1a1030 0%,#0f2030 50%,#201030 100%);--text:#f4eaff;--muted:#a99ac9;--accent:#ff5cb8;--accent-2:#3ee6ff;}
+html[data-theme="ocean"][data-scheme="dark"]{--bg:linear-gradient(180deg,#0a2a5e 0%,#0e4f8a 50%,#0a6b8c 100%);--text:#e6f7ff;--muted:#8fc0d8;--accent:#4fd1ff;--accent-2:#3ee0b8;}
+html[data-theme="academia"][data-scheme="dark"]{--bg:linear-gradient(160deg,#1d1712 0%,#2b2118 55%,#171210 100%);--text:#e8dcc8;--muted:#a8937a;--accent:#c9a227;--accent-2:#d8b451;}
+html[data-theme="jelly"][data-scheme="dark"]{--bg:linear-gradient(140deg,#2a1030 0%,#101c33 50%,#102a22 100%);--text:#ffeaf6;--muted:#c3a3bd;--accent:#ff6fb0;--accent-2:#4fe6b8;}
+
+/* ============================================================
+   DECOR LAYER
+   ============================================================ */
+.decor{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+.decor .d{
+  position:absolute;user-select:none;line-height:1;
+  opacity:.55;filter:saturate(1.05);
+  animation-name:floatY;animation-timing-function:ease-in-out;animation-iteration-count:infinite;
+  will-change:transform;
+}
+@keyframes floatY{
+  0%,100%{transform:translate3d(0,0,0) rotate(-6deg);}
+  50%{transform:translate3d(10px,-26px,0) rotate(8deg);}
+}
+html[data-effects="off"] .decor{display:none;}
+html[data-effects="light"] .decor .d{opacity:.32;}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app{
+  position:relative;z-index:2;
+  max-width:900px;margin:0 auto;
+  padding:18px 16px 26px;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.brand{display:flex;align-items:center;gap:11px;min-width:0;}
+.logo{
+  width:48px;height:48px;flex:none;border-radius:16px;display:grid;place-items:center;
+  font-size:24px;background:var(--primary-bg);color:var(--primary-text);
+  box-shadow:var(--primary-shadow);
+  transition:transform .25s ease,box-shadow .25s;
+}
+.brand:hover .logo{transform:rotate(-8deg) scale(1.06);}
+.brand-text{min-width:0;}
+.app-name{
+  margin:0;font-size:1.16rem;font-weight:800;letter-spacing:.2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.tagline{margin:1px 0 0;font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.icon-btn{
+  width:48px;height:48px;flex:none;border:0;cursor:pointer;border-radius:16px;
+  display:grid;place-items:center;font-size:20px;
+  background:var(--btn-bg);color:var(--btn-text);
+  box-shadow:var(--btn-shadow);
+  transition:transform .13s ease,box-shadow .13s ease,filter .2s;
+}
+.icon-btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.icon-btn:active{transform:translateY(4px);box-shadow:var(--btn-shadow-active);}
+
+/* Mode switch */
+.mode-switch{
+  display:flex;gap:8px;padding:7px;border-radius:22px;
+  background:var(--surface);border:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  margin-bottom:18px;
+}
+.mode-btn{
+  flex:1;border:0;cursor:pointer;padding:12px 10px;border-radius:16px;
+  font-size:.95rem;font-weight:800;color:var(--muted);background:transparent;
+  transition:all .22s ease;
+}
+.mode-btn.active{
+  color:var(--primary-text);background:var(--primary-bg);
+  box-shadow:var(--primary-shadow);
+  transform:translateY(-1px);
+}
+.mode-btn:not(.active):hover{color:var(--text);background:var(--surface-2);}
+
+/* Stage */
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;}
+
+/* Clock */
+.clock{
+  position:relative;
+  width:min(78vw,340px);
+  aspect-ratio:1;
+  margin:4px auto 14px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:var(--clock-bg);
+  box-shadow:var(--clock-shadow);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .45s ease,background .45s ease,border-radius .4s;
+  animation:clockFloat 6s ease-in-out infinite;
+}
+@keyframes clockFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-7px);}
+}
+.clock.running{animation:clockPulse 3s ease-in-out infinite;}
+@keyframes clockPulse{
+  0%,100%{transform:translateY(0) scale(1);}
+  50%{transform:translateY(-8px) scale(1.018);}
+}
+.clock.urgent{animation:clockUrgent .9s ease-in-out infinite;}
+@keyframes clockUrgent{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.045);}
+}
+.clock.shake{animation:shakeIt .45s ease;}
+@keyframes shakeIt{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-9px) rotate(-1.5deg);}
+  40%{transform:translateX(9px) rotate(1.5deg);}
+  60%{transform:translateX(-6px) rotate(-1deg);}
+  80%{transform:translateX(6px) rotate(1deg);}
+}
+.clock.done{animation:donePop .7s cubic-bezier(.34,1.56,.64,1) 2;}
+@keyframes donePop{
+  0%{transform:scale(1);}
+  45%{transform:scale(1.09) rotate(2deg);}
+  100%{transform:scale(1);}
+}
+
+.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);transition:opacity .35s;}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round;}
+.ring .track{stroke:var(--ring-track);}
+.ring .bar{
+  stroke:url(#ringGrad);
+  transition:stroke-dashoffset .12s linear;
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--accent) 65%, transparent));
+}
+
+.clock-face{position:relative;z-index:3;text-align:center;padding:0 12%;width:100%;}
+.clock-label{
+  font-size:.68rem;letter-spacing:.22em;font-weight:800;
+  color:var(--muted);text-transform:uppercase;margin-bottom:6px;
+}
+.time{
+  font-family:var(--display-font);
+  font-size:clamp(1.75rem,8.4vw,2.85rem);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+  text-shadow:var(--time-shadow);
+  word-break:keep-all;
+  white-space:nowrap;
+}
+.clock-sub{margin-top:7px;font-size:.7rem;color:var(--muted);letter-spacing:.05em;min-height:1em;}
+
+.burst-number{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--display-font);font-weight:900;
+  font-size:clamp(4rem,22vw,7rem);
+  color:var(--accent);
+  opacity:0;pointer-events:none;z-index:4;
+  text-shadow:0 0 30px color-mix(in srgb,var(--accent) 70%, transparent),0 4px 0 rgba(255,255,255,.4);
+}
+.burst-number.show{animation:burstPop .85s cubic-bezier(.22,1.4,.4,1) forwards;}
+@keyframes burstPop{
+  0%{opacity:0;transform:scale(.4);}
+  25%{opacity:1;transform:scale(1.15);}
+  60%{opacity:.95;transform:scale(1);}
+  100%{opacity:0;transform:scale(1.6);}
+}
+
+/* Bubble */
+.bubble-wrap{min-height:56px;display:flex;align-items:center;justify-content:center;width:100%;padding:0 6px;}
+.bubble{
+  max-width:min(560px,92vw);
+  padding:11px 20px;
+  border-radius:20px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-size:.92rem;font-weight:700;text-align:center;
+  box-shadow:0 10px 26px rgba(0,0,0,.10),inset 0 2px 0 rgba(255,255,255,.6);
+  opacity:0;transform:translateY(8px) scale(.96);
+  transition:opacity .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;
+  position:relative;
+}
+.bubble.show{opacity:1;transform:translateY(0) scale(1);}
+.bubble::after{
+  content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%) rotate(45deg);
+  width:16px;height:16px;background:var(--surface-2);
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  border-radius:0 0 4px 0;
+}
+
+/* Progress bar */
+.progress{
+  width:min(560px,92vw);height:14px;border-radius:999px;margin:12px auto 16px;
+  background:var(--ring-track);overflow:hidden;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,.12);
+  transition:opacity .3s;
+}
+.progress-fill{
+  height:100%;width:0%;border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  box-shadow:0 0 12px color-mix(in srgb,var(--accent) 70%, transparent),inset 0 2px 0 rgba(255,255,255,.55);
+  transition:width .12s linear;
+}
+
+/* Controls */
+.controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;margin-bottom:16px;}
+.btn{
+  border:0;cursor:pointer;font-size:1rem;font-weight:800;
+  padding:15px 26px;border-radius:18px;
+  background:var(--btn-bg);color:var(--btn-text);
+  box-shadow:var(--btn-shadow);
+  transition:transform .13s ease,box-shadow .13s ease,filter .2s ease,opacity .2s;
+  min-width:120px;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.btn:active{transform:translateY(5px);box-shadow:var(--btn-shadow-active);}
+.btn.primary{
+  background:var(--primary-bg);color:var(--primary-text);
+  box-shadow:var(--primary-shadow);
+  min-width:170px;font-size:1.06rem;
+}
+.btn.primary:active{box-shadow:var(--primary-shadow-active);}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none;}
+.btn:disabled:hover{transform:none;}
+
+/* Quick picks */
+.quick-picks{
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:center;
+  width:100%;margin-bottom:16px;
+}
+.chip{
+  border:1px solid var(--border);cursor:pointer;
+  padding:9px 16px;border-radius:999px;
+  font-size:.85rem;font-weight:800;
+  background:var(--surface);color:var(--text);
+  box-shadow:0 4px 0 var(--ring-track),0 8px 14px rgba(0,0,0,.07);
+  transition:transform .13s,box-shadow .13s,filter .2s,background .2s;
+}
+.chip:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ring-track);}
+.chip.active{background:var(--primary-bg);color:var(--primary-text);box-shadow:var(--primary-shadow);border-color:transparent;}
+
+/* Custom time */
+.custom-time{
+  display:flex;gap:12px;justify-content:center;align-items:flex-end;
+  width:100%;margin-bottom:16px;flex-wrap:wrap;
+}
+.custom-time.disabled{opacity:.5;pointer-events:none;}
+.custom-time label{
+  display:flex;flex-direction:column;gap:5px;
+  font-size:.72rem;font-weight:800;letter-spacing:.12em;
+  color:var(--muted);text-transform:uppercase;
+}
+.custom-time input{
+  width:88px;padding:12px 8px;text-align:center;
+  font-family:var(--display-font);font-size:1.3rem;font-weight:800;
+  color:var(--text);background:var(--surface-2);
+  border:1px solid var(--border);border-radius:14px;
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.07);
+  font-variant-numeric:tabular-nums;
+  transition:border-color .2s,box-shadow .2s;
+}
+.custom-time input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%, transparent);}
+
+/* Laps */
+.laps{
+  width:min(560px,92vw);margin:0 auto 14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:12px 14px;
+  box-shadow:0 10px 26px rgba(0,0,0,.08);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  max-height:230px;overflow-y:auto;
+}
+.laps-head{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.74rem;font-weight:800;letter-spacing:.14em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:8px;
+}
+.link-btn{
+  border:0;background:none;cursor:pointer;color:var(--accent);
+  font-weight:800;font-size:.74rem;padding:3px 6px;border-radius:8px;
+}
+.link-btn:hover{background:var(--surface-2);}
+#lapList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+#lapList li{
+  display:flex;justify-content:space-between;gap:8px;
+  font-size:.86rem;font-weight:700;
+  padding:8px 11px;border-radius:12px;
+  background:var(--surface-2);
+  font-variant-numeric:tabular-nums;
+  animation:lapIn .3s ease;
+}
+@keyframes lapIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+#lapList li .lap-n{color:var(--muted);min-width:44px;}
+#lapList li .lap-diff{color:var(--accent);font-weight:800;}
+#lapList li .lap-total{color:var(--muted);}
+
+/* Footer */
+.footer{
+  text-align:center;font-size:.72rem;color:var(--muted);
+  padding:16px 0 4px;letter-spacing:.06em;opacity:.85;
+}
+
+/* ============================================================
+   FX LAYER (confetti)
+   ============================================================ */
+.fx-layer{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden;}
+.fx-piece{
+  position:absolute;top:-8vh;
+  animation:fxFall linear forwards;
+  will-change:transform,opacity;
+}
+@keyframes fxFall{
+  0%{transform:translateY(-10vh) rotate(0deg) scale(.7);opacity:0;}
+  12%{opacity:1;}
+  100%{transform:translateY(112vh) rotate(560deg) scale(1.1);opacity:0;}
+}
+
+/* ============================================================
+   MODAL / SETTINGS
+   ============================================================ */
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:end center;padding:0;}
+.modal[hidden]{display:none;}
+.modal-backdrop{
+  position:absolute;inset:0;background:rgba(12,8,22,.5);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-panel{
+  position:relative;width:100%;max-width:560px;
+  max-height:90vh;display:flex;flex-direction:column;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:26px 26px 0 0;
+  box-shadow:0 -18px 50px rgba(0,0,0,.35);
+  animation:slideUp .32s cubic-bezier(.34,1.3,.64,1);
+  overflow:hidden;
+  color:var(--text);
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
+@media (min-width:640px){
+  .modal{place-items:center;padding:24px;}
+  .modal-panel{border-radius:26px;max-height:86vh;animation:popIn .3s cubic-bezier(.34,1.4,.64,1);}
+  @keyframes popIn{from{transform:scale(.94);opacity:.5;}to{transform:scale(1);opacity:1;}}
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:16px 18px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface-2);z-index:2;
+}
+.modal-head h2{margin:0;font-size:1.05rem;font-weight:800;}
+.modal-body{padding:16px 18px 26px;overflow-y:auto;display:flex;flex-direction:column;gap:20px;}
+.settings-section{display:flex;flex-direction:column;gap:11px;}
+.settings-section h3{
+  margin:0;font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;
+}
+.theme-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:9px;
+}
+.theme-card{
+  border:2px solid var(--border);background:var(--surface);
+  border-radius:16px;padding:7px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:transform .16s ease,border-color .2s,box-shadow .2s;
+  color:var(--text);
+}
+.theme-card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.14);}
+.theme-card.active{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 28%, transparent);}
+.tc-preview{
+  width:100%;aspect-ratio:1.55;border-radius:11px;
+  display:grid;place-items:center;font-size:19px;
+  box-shadow:inset 0 -6px 12px rgba(0,0,0,.12),inset 0 5px 10px rgba(255,255,255,.5);
+}
+.tc-name{font-size:.66rem;font-weight:800;text-align:center;line-height:1.15;}
+
+.setting-row{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:10px 12px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--border);
+}
+.setting-label{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.setting-label span{font-size:.87rem;font-weight:800;}
+.setting-label small{font-size:.69rem;color:var(--muted);line-height:1.25;}
+
+/* Switch */
+.switch{position:relative;display:inline-block;width:50px;height:28px;flex:none;}
+.switch input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2;}
+.switch .track{
+  position:absolute;inset:0;border-radius:999px;background:var(--ring-track);
+  transition:background .25s;box-shadow:inset 0 2px 5px rgba(0,0,0,.18);
+}
+.switch .track::after{
+  content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.switch input:checked + .track{background:var(--accent);}
+.switch input:checked + .track::after{transform:translateX(22px);}
+.switch input:focus-visible + .track{outline:3px solid var(--accent);outline-offset:3px;}
+
+/* Segmented */
+.segmented{
+  display:flex;gap:4px;padding:4px;border-radius:13px;
+  background:var(--ring-track);flex:none;
+}
+.segmented button{
+  border:0;cursor:pointer;background:transparent;color:var(--muted);
+  font-size:.76rem;font-weight:800;padding:7px 11px;border-radius:10px;
+  transition:all .2s;
+}
+.segmented button.active{background:var(--primary-bg);color:var(--primary-text);box-shadow:0 3px 8px rgba(0,0,0,.18);}
+
+/* Select */
+select{
+  font-family:inherit;font-size:.82rem;font-weight:700;
+  padding:9px 12px;border-radius:12px;cursor:pointer;
+  background:var(--surface-2);color:var(--text);
+  border:1px solid var(--border);
+  max-width:170px;
+}
+select:focus{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* Range */
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;width:140px;height:8px;border-radius:999px;
+  background:var(--ring-track);cursor:pointer;outline:none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--primary-bg);box-shadow:0 3px 8px rgba(0,0,0,.3),inset 0 2px 3px rgba(255,255,255,.5);
+  border:2px solid rgba(255,255,255,.8);
+}
+input[type="range"]::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.8);
+  background:#ff77b0;box-shadow:0 3px 8px rgba(0,0,0,.3);
+}
+
+.danger-btn{
+  border:1px solid var(--border);cursor:pointer;
+  padding:12px 18px;border-radius:14px;font-weight:800;font-size:.86rem;
+  background:var(--surface);color:var(--text);
+  box-shadow:0 4px 0 var(--ring-track);
+  transition:transform .13s,box-shadow .13s,filter .2s;
+  width:100%;
+}
+.danger-btn:hover{filter:brightness(1.05);transform:translateY(-1px);}
+.danger-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ring-track);}
+
+/* ============================================================
+   THEME-SPECIFIC TOUCHES
+   ============================================================ */
+html[data-theme="anime"] .clock::after{
+  content:'💗';position:absolute;top:9%;right:13%;font-size:20px;opacity:.85;
+  animation:heartBeat 1.8s ease-in-out infinite;
+}
+@keyframes heartBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.22);}}
+html[data-theme="pastel"] .clock::after{
+  content:'☁️';position:absolute;top:7%;left:11%;font-size:22px;opacity:.8;
+}
+html[data-theme="ghibli"] .clock::after{
+  content:'🍃';position:absolute;bottom:11%;right:12%;font-size:20px;opacity:.85;
+  animation:sway 4s ease-in-out infinite;
+}
+@keyframes sway{0%,100%{transform:rotate(-12deg);}50%{transform:rotate(14deg);}}
+html[data-theme="cyber"] .clock::after{
+  content:'';position:absolute;inset:-6px;border-radius:inherit;
+  border:2px dashed rgba(0,200,224,.45);opacity:.55;
+  animation:spinSlow 18s linear infinite;
+}
+@keyframes spinSlow{to{transform:rotate(360deg);}}
+html[data-theme="galaxy"] .clock::after{
+  content:'🪐';position:absolute;top:8%;left:13%;font-size:20px;opacity:.85;
+  animation:floatY 7s ease-in-out infinite;
+}
+html[data-theme="cafe"] .clock::after{
+  content:'☕';position:absolute;bottom:12%;left:13%;font-size:20px;opacity:.8;
+}
+html[data-theme="y2k"] .clock::after{
+  content:'✦';position:absolute;top:10%;right:14%;font-size:22px;opacity:.9;
+  animation:spinSlow 9s linear infinite;
+}
+html[data-theme="ocean"] .clock::after{
+  content:'🫧';position:absolute;top:10%;left:12%;font-size:20px;opacity:.8;
+  animation:floatY 5.5s ease-in-out infinite;
+}
+html[data-theme="academia"] .clock::after{
+  content:'';position:absolute;inset:9px;border-radius:inherit;
+  border:1px solid rgba(140,110,60,.35);pointer-events:none;
+}
+html[data-theme="jelly"] .clock::after{
+  content:'';position:absolute;top:12%;left:20%;width:26%;height:16%;
+  border-radius:50%;background:rgba(255,255,255,.75);filter:blur(5px);
+  pointer-events:none;
+}
+html[data-theme="cyber"] .time{letter-spacing:.04em;}
+html[data-theme="academia"] .time{font-variant-numeric:oldstyle-nums;}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:520px){
+  .app{padding:14px 12px 20px;}
+  .clock{width:min(84vw,320px);}
+  .btn{padding:14px 18px;font-size:.93rem;min-width:104px;}
+  .btn.primary{min-width:150px;}
+  .custom-time input{width:76px;font-size:1.15rem;}
+  .theme-grid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));}
+  .mode-btn{font-size:.87rem;padding:11px 6px;}
+  .setting-row{padding:9px 10px;gap:10px;}
+  select{max-width:130px;}
+  input[type="range"]{width:110px;}
+}
+@media (max-width:360px){
+  .btn{padding:13px 14px;font-size:.86rem;min-width:92px;}
+  .time{font-size:clamp(1.5rem,7.6vw,2.4rem);}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .decor{display:none;}
+}
+html[data-effects="off"] *{
+  animation-duration:.001ms !important;
+  animation-iteration-count:1 !important;
+}
+html[data-effects="off"] .decor{display:none;}
+</style>
+</head>
+<body data-mode="stopwatch">
+
+<div class="decor" id="decor" aria-hidden="true"></div>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">⏳</div>
+      <div class="brand-text">
+        <h1 class="app-name">Count Timer</h1>
+        <p class="tagline" id="tagline">Đếm thời gian thật dễ thương</p>
+      </div>
+    </div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Mở cài đặt" title="Cài đặt">⚙️</button>
+  </header>
+
+  <div class="mode-switch" role="tablist" aria-label="Chọn chế độ">
+    <button class="mode-btn active" data-mode="stopwatch" role="tab" aria-selected="true">⏱️ Bấm giờ</button>
+    <button class="mode-btn" data-mode="countdown" role="tab" aria-selected="false">⏳ Hẹn giờ</button>
+  </div>
+
+  <main class="stage">
+    <div class="clock" id="clock">
+      <svg class="ring" id="ring" viewBox="0 0 300 300" aria-hidden="true">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--accent)"/>
+            <stop offset="100%" stop-color="var(--accent-2)"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="150" cy="150" r="138"/>
+        <circle class="bar" id="ringBar" cx="150" cy="150" r="138"/>
+      </svg>
+      <div class="clock-face">
+        <div class="clock-label" id="clockLabel">BẤM GIỜ</div>
+        <div class="time" id="timeDisplay">00:00</div>
+        <div class="clock-sub" id="clockSub">đã trôi qua</div>
+      </div>
+      <div class="burst-number" id="burstNumber" aria-hidden="true"></div>
+    </div>
+
+    <div class="bubble-wrap">
+      <div class="bubble" id="bubble" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="progress" id="progressWrap">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="startBtn">▶ Bắt đầu</button>
+      <button class="btn" id="resetBtn">↺ Đặt lại</button>
+      <button class="btn" id="lapBtn">🏁 Lap</button>
+    </div>
+
+    <div class="quick-picks" id="quickPicks"></div>
+
+    <div class="custom-time" id="customTime">
+      <label>Giờ<input type="number" id="inH" min="0" max="99" step="1" value="0" inputmode="numeric"></label>
+      <label>Phút<input type="number" id="inM" min="0" max="59" step="1" value="0" inputmode="numeric"></label>
+      <label>Giây<input type="number" id="inS" min="0" max="59" step="1" value="0" inputmode="numeric"></label>
+    </div>
+
+    <div class="laps" id="lapsWrap" hidden>
+      <div class="laps-head">
+        <span>Mốc thời gian</span>
+        <button class="link-btn" id="clearLaps" type="button">Xoá</button>
+      </div>
+      <ul id="lapList"></ul>
+    </div>
+  </main>
+
+  <footer class="footer">Made with 💖 · Count Timer · Chỉ đếm thời gian, thật nhẹ nhàng</footer>
+</div>
+
+<div class="fx-layer" id="fxLayer" aria-hidden="true"></div>
+
+<!-- ================= SETTINGS MODAL ================= -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+    <div class="modal-head">
+      <h2 id="settingsTitle">⚙️ Cài đặt</h2>
+      <button class="icon-btn" data-close aria-label="Đóng cài đặt" type="button">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <section class="settings-section">
+        <h3>🎨 Giao diện</h3>
+        <div class="theme-grid" id="themeGrid"></div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Sáng / Tối</span><small>Đổi tông nền của giao diện</small></div>
+          <div class="segmented" id="schemeSeg">
+            <button type="button" data-value="light">Sáng</button>
+            <button type="button" data-value="dark">Tối</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Mức hiệu ứng</span><small>Trang trí &amp; hoạt ảnh nền</small></div>
+          <div class="segmented" id="effectsSeg">
+            <button type="button" data-value="off">Tắt</button>
+            <button type="button" data-value="light">Nhẹ</button>
+            <button type="button" data-value="full">Đầy đủ</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>🔔 Thông báo</h3>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Câu thông báo theo mốc</span><small>Hiện lời nhắn khi tới các mốc thời gian</small></div>
+          <label class="switch"><input type="checkbox" id="setMilestone"><span class="track"></span></label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Phong cách câu chữ</span><small>Giọng điệu của lời nhắn</small></div>
+          <select id="setStyle">
+            <option value="cute">Cute</option>
+            <option value="anime">Anime</option>
+            <option value="friend">Bạn bè động viên</option>
+            <option value="minimal">Tối giản</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Âm thanh</span><small>Tiếng ting, pop và chuông hoàn thành</small></div>
+          <label class="switch"><input type="checkbox" id="setSound"><span class="track"></span></label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Âm lượng</span><small>Chỉnh to nhỏ âm thanh thông báo</small></div>
+          <input type="range" id="setVolume" min="0" max="100" step="1">
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Hiệu ứng hoàn thành</span><small>Mưa sticker khi đếm xong</small></div>
+          <label class="switch"><input type="checkbox" id="setConfetti"><span class="track"></span></label>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>⏱️ Đồng hồ</h3>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Định dạng hiển thị</span><small>HH:MM:SS, MM:SS hoặc tự động</small></div>
+          <select id="setFormat">
+            <option value="auto">Tự động</option>
+            <option value="hms">HH:MM:SS</option>
+            <option value="ms">MM:SS</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Phần trăm giây</span><small>Hiện .00 trong chế độ bấm giờ</small></div>
+          <label class="switch"><input type="checkbox" id="setCs"><span class="track"></span></label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Vòng tiến trình</span><small>Vòng tròn bao quanh đồng hồ</small></div>
+          <label class="switch"><input type="checkbox" id="setRing"><span class="track"></span></label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Lịch sử lap</span><small>Hiện danh sách mốc đã bấm</small></div>
+          <label class="switch"><input type="checkbox" id="setLaps"><span class="track"></span></label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Giữ thời gian khi tạm dừng</span><small>Tắt: tạm dừng sẽ đưa hẹn giờ về ban đầu</small></div>
+          <label class="switch"><input type="checkbox" id="setKeep"><span class="track"></span></label>
+        </div>
+      </section>
+
+      <section class="settings-section">
+        <h3>✨ Trải nghiệm</h3>
+
+        <div class="setting-row">
+          <div class="setting-label"><span>Giữ màn hình sáng</span><small>Dùng Screen Wake Lock API nếu có</small></div>
+          <label class="switch"><input type="checkbox" id="setWake"><span class="track"></span></label>
+        </div>
+
+        <button class="danger-btn" id="resetAll" type="button">↺ Khôi phục cài đặt mặc định</button>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
+const STORAGE_KEY = 'counttimer.settings.v1';
+const RING_R = 138;
+const RING_C = 2 * Math.PI * RING_R;
+
+const THEME_LIST = [
+  { id:'anime',    name:'Anime Kawaii',  emoji:'🌸', colors:['#ffd1e8','#ff77b0','#fff0f7'] },
+  { id:'pastel',   name:'Cute Pastel',   emoji:'☁️', colors:['#e8f7ff','#9b8cff','#e6fff4'] },
+  { id:'ghibli',   name:'Ghibli Nature', emoji:'🌿', colors:['#bfe6f5','#4f8f6a','#f6f0d8'] },
+  { id:'cyber',    name:'Cyberpunk',     emoji:'⚡', colors:['#e2e9ff','#00c8e0','#ff2bd6'] },
+  { id:'galaxy',   name:'Galaxy Dream',  emoji:'🌌', colors:['#efe6ff','#8b5cf6','#22c9e0'] },
+  { id:'cafe',     name:'Cozy Cafe',     emoji:'☕', colors:['#f7ecd9','#b5773f','#e2c9a4'] },
+  { id:'y2k',      name:'Y2K Pop',       emoji:'💿', colors:['#ffe9f7','#ff3ea5','#00d4ff'] },
+  { id:'ocean',    name:'Ocean Blue',    emoji:'🌊', colors:['#d9f4ff','#1b8fd1','#37d6b0'] },
+  { id:'academia', name:'Dark Academia', emoji:'📚', colors:['#f6efe0','#8a6b2f','#3d2f20'] },
+  { id:'jelly',    name:'3D Jelly World',emoji:'🍬', colors:['#ffe7f2','#ff5fa2','#48e0b0'] }
+];
+
+const DECOR_EMOJI = {
+  anime:    ['💖','⭐','🌸','✨','💕','🎀','🌟','💗'],
+  pastel:   ['☁️','🌸','🐰','🎀','⭐','🧸','🫧','🌷'],
+  ghibli:   ['☁️','🍃','🌿','🕊️','🌾','☀️','🌳','🍂'],
+  cyber:    ['⚡','🔷','💠','✦','◈','▣','⬢','⧫'],
+  galaxy:   ['✨','⭐','🪐','🌟','💫','🌙','☄️','🔭'],
+  cafe:     ['☕','🍰','📖','🥐','🕯️','🍪','🧁','📝'],
+  y2k:      ['⭐','💿','✨','🦋','💗','🔮','🪩','💎'],
+  ocean:    ['🫧','🐠','🌊','🐚','🐟','💧','🪸','⛵'],
+  academia: ['📚','🕯️','🍂','🖋️','🕰️','📜','🪶','🗝️'],
+  jelly:    ['🍬','🍭','🧸','🍡','🫧','🌈','🍮','🎈']
+};
+
+const QUICK_MINUTES = [1,3,5,10,15,25,30,45,60];
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+function percentMsg(p){
+  return {
+    cute:    `Đã qua ${p}% thời gian rồi đó! ✨`,
+    anime:   `${p}% rồi nè~ cố lên nha! 💫`,
+    friend:  `Bạn đã đi được ${p}% chặng đường rồi!`,
+    minimal: `Đã qua ${p}%.`
+  };
+}
+
+const MSG = {
+  cdStart: {
+    cute:'Bắt đầu thui nào! ✨',
+    anime:'Yosh! Bắt đầu thôi nào~ ✨',
+    friend:'Bắt đầu nhé, mình tin bạn làm được!',
+    minimal:'Bắt đầu.'
+  },
+  cd10: {
+    cute:'Khởi đầu suôn sẻ rùi nè! 🌸',
+    anime:'Khởi đầu suôn sẻ quá đi~ 🌸',
+    friend:'Khởi đầu tốt lắm, giữ nhịp nhé!',
+    minimal:'Đã qua 10%.'
+  },
+  cd25: {
+    cute:'Được một phần tư rùi đó! 💗',
+    anime:'Một phần tư rồi đó, cố lên nha! 💗',
+    friend:'Cứ từ từ thôi, bạn làm tốt lắm!',
+    minimal:'Đã qua 25%.'
+  },
+  cd50: {
+    cute:'Được nửa thời gian rùi nè! 🌸',
+    anime:'Nửa đường rồi đó~ 🌸',
+    friend:'Nửa chặng rồi, nghỉ mắt chút nhé!',
+    minimal:'Đã qua 50%.'
+  },
+  cd75: {
+    cute:'Sắp về đích rùi, cố lênnn! 🚀',
+    anime:'Sắp xong rồi, cố thêm chút nữa nha! ✨',
+    friend:'Sắp về đích rồi, cố lên!',
+    minimal:'Đã qua 75%.'
+  },
+  cd5min: {
+    cute:'Chỉ còn 5 phút nữa thui! ⏰',
+    anime:'Còn 5 phút nữa thôi đó~ ⏰',
+    friend:'Còn 5 phút, tập trung nốt nào!',
+    minimal:'Còn 5 phút.'
+  },
+  cd1min: {
+    cute:'Sắp xong rùi nè, cố thêm chút nữa! 🥹',
+    anime:'Còn 1 phút thôi, cố lên nha! 🥹',
+    friend:'Còn đúng 1 phút, bạn làm được!',
+    minimal:'Còn 1 phút.'
+  },
+  cd10s: {
+    cute:'10 giây cuối cùng! Chuẩn bị nha~ ⏳',
+    anime:'Còn 10 giây thôi! Hồi hộp ghê~ ⏳',
+    friend:'Còn 10 giây, sẵn sàng nhé!',
+    minimal:'Còn 10 giây.'
+  },
+  cdDone: {
+    cute:'Xong rùiiii! Bạn giỏi lắm! 🎉',
+    anime:'Xong rồi! Bạn tuyệt vời nhất! 🎉✨',
+    friend:'Hoàn thành rồi! Tự hào về bạn! 🎉',
+    minimal:'Hoàn thành.'
+  },
+  sw10s: {
+    cute:'10 giây trôi qua rồi nè! 🌱',
+    anime:'10 giây rồi đó~ bắt đầu thấy vui chưa? 🌱',
+    friend:'10 giây rồi, khởi động tốt lắm!',
+    minimal:'Đã 10 giây.'
+  },
+  sw30s: {
+    cute:'30 giây rồi! Bạn đang làm rất tốt 💗',
+    anime:'30 giây rồi nè~ giỏi quá! 💗',
+    friend:'30 giây, giữ vững nhịp độ nhé!',
+    minimal:'Đã 30 giây.'
+  },
+  sw1m: {
+    cute:'Một phút rồi đó! Tuyệt vời! ✨',
+    anime:'Một phút rồi nè~ tiếp tục nha! ✨',
+    friend:'Một phút tập trung, cố lên!',
+    minimal:'Đã 1 phút.'
+  },
+  sw5m: {
+    cute:'Bạn đã tập trung được 5 phút rùi đó! 🌟',
+    anime:'5 phút rồi nè~ bạn siêu ghê! 🌟',
+    friend:'Bạn đã tập trung được 5 phút rồi đó!',
+    minimal:'Đã 5 phút.'
+  },
+  sw10m: {
+    cute:'10 phút kiên trì luôn! Quá đỉnh! 💫',
+    anime:'10 phút rồi đó~ nghỉ mắt xíu nha! 💫',
+    friend:'10 phút rồi, uống ngụm nước nhé!',
+    minimal:'Đã 10 phút.'
+  },
+  sw30m: {
+    cute:'Wow, 30 phút kiên trì luôn! 🌟',
+    anime:'30 phút rồi! Bạn là siêu nhân hả~ 🌟',
+    friend:'30 phút rồi, bạn kiên trì thật đấy!',
+    minimal:'Đã 30 phút.'
+  },
+  sw1h: {
+    cute:'Một giờ trôi qua rùi, nghỉ ngơi một chút nhé? 🌸',
+    anime:'Một giờ rồi đó~ duỗi người chút đi nha! 🌸',
+    friend:'Một giờ rồi, nghỉ ngơi một chút nhé?',
+    minimal:'Đã 1 giờ.'
+  }
+};
+
+const SW_MILESTONES = [
+  { at: 10000,    key:'sw10s', msg: MSG.sw10s },
+  { at: 30000,    key:'sw30s', msg: MSG.sw30s },
+  { at: 60000,    key:'sw1m',  msg: MSG.sw1m  },
+  { at: 300000,   key:'sw5m',  msg: MSG.sw5m  },
+  { at: 600000,   key:'sw10m', msg: MSG.sw10m },
+  { at: 1800000,  key:'sw30m', msg: MSG.sw30m },
+  { at: 3600000,  key:'sw1h',  msg: MSG.sw1h  }
+];
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+const DEFAULT_SETTINGS = {
+  theme: 'anime',
+  scheme: 'light',
+  effects: 'full',
+  milestoneMessages: true,
+  messageStyle: 'cute',
+  sound: true,
+  volume: 55,
+  completionEffect: true,
+  timeFormat: 'auto',
+  showCentiseconds: true,
+  showRing: true,
+  showLaps: true,
+  keepRemainingOnPause: true,
+  wakeLock: false
+};
+
+let settings = loadSettings();
+
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return Object.assign({}, DEFAULT_SETTINGS);
+    const parsed = JSON.parse(raw);
+    const merged = Object.assign({}, DEFAULT_SETTINGS, parsed || {});
+    if(!THEME_LIST.some(t => t.id === merged.theme)) merged.theme = DEFAULT_SETTINGS.theme;
+    return merged;
+  }catch(e){
+    return Object.assign({}, DEFAULT_SETTINGS);
+  }
+}
+
+let saveTimer = null;
+function saveSettings(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); }catch(e){}
+  }, 120);
+}
+
+/* ============================================================
+   TIMER STATE
+   ============================================================ */
+const sw = { running:false, base:0, startTs:0, fired:new Set(), laps:[] };
+const cd = {
+  running:false, total:0, base:0, startTs:0,
+  fired:new Set(), milestones:[], started:false, completed:false
+};
+
+const state = { mode:'stopwatch' };
+
+function nowTs(){ return performance.now(); }
+function swElapsed(){ return sw.running ? sw.base + (nowTs() - sw.startTs) : sw.base; }
+function cdRemaining(){ return cd.running ? Math.max(0, cd.base - (nowTs() - cd.startTs)) : cd.base; }
+
+/* ============================================================
+   DOM REFS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const htmlEl      = document.documentElement;
+const decorEl     = $('decor');
+const clockEl     = $('clock');
+const ringEl      = $('ring');
+const ringBar     = $('ringBar');
+const timeDisplay = $('timeDisplay');
+const clockLabel  = $('clockLabel');
+const clockSub    = $('clockSub');
+const burstNumber = $('burstNumber');
+const bubbleEl    = $('bubble');
+const progressFill= $('progressFill');
+const startBtn    = $('startBtn');
+const resetBtn    = $('resetBtn');
+const lapBtn      = $('lapBtn');
+const quickPicks  = $('quickPicks');
+const customTime  = $('customTime');
+const inH         = $('inH');
+const inM         = $('inM');
+const inS         = $('inS');
+const lapsWrap    = $('lapsWrap');
+const lapList     = $('lapList');
+const clearLapsBtn= $('clearLaps');
+const modal       = $('modal');
+const settingsBtn = $('settingsBtn');
+const fxLayer     = $('fxLayer');
+const themeGrid   = $('themeGrid');
+const tagline     = $('tagline');
+
+/* ============================================================
+   AUDIO (Web Audio API)
+   ============================================================ */
+let audioCtx = null;
+
+function getAudioCtx(){
+  if(audioCtx) {
+    if(audioCtx.state === 'suspended'){ audioCtx.resume().catch(()=>{}); }
+    return audioCtx;
+  }
+  try{
+    const Ctor = window.AudioContext || window.webkitAudioContext;
+    if(!Ctor) return null;
+    audioCtx = new Ctor();
+    return audioCtx;
+  }catch(e){ return null; }
+}
+
+function tone(freq, delay, dur, type, vol){
+  if(!settings.sound) return;
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  try{
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    const t0 = ctx.currentTime + (delay || 0);
+    const v = Math.max(0.0001, (vol != null ? vol : 0.18) * (settings.volume / 100));
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(v, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.05);
+  }catch(e){}
+}
+
+function soundMilestone(){ tone(880, 0, 0.13, 'sine', 0.16); tone(1320, 0.08, 0.2, 'sine', 0.12); }
+function soundStart(){ tone(523.25, 0, 0.11, 'triangle', 0.14); tone(783.99, 0.09, 0.16, 'triangle', 0.14); }
+function soundPause(){ tone(392, 0, 0.13, 'sine', 0.12); }
+function soundReset(){ tone(330, 0, 0.1, 'sine', 0.1); tone(247, 0.08, 0.14, 'sine', 0.1); }
+function soundTick(){ tone(1100, 0, 0.05, 'square', 0.05); }
+function soundComplete(){
+  const notes = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+  notes.forEach((f,i)=> tone(f, i*0.11, 0.42, 'triangle', 0.17));
+  tone(261.63, 0.55, 0.9, 'sine', 0.11);
+}
+
+/* ============================================================
+   WAKE LOCK
+   ============================================================ */
+let wakeLockSentinel = null;
+
+async function requestWakeLock(){
+  if(!settings.wakeLock) return;
+  if(!('wakeLock' in navigator)) return;
+  try{
+    if(wakeLockSentinel) return;
+    wakeLockSentinel = await navigator.wakeLock.request('screen');
+    wakeLockSentinel.addEventListener('release', ()=>{ wakeLockSentinel = null; });
+  }catch(e){ wakeLockSentinel = null; }
+}
+function releaseWakeLock(){
+  if(wakeLockSentinel){
+    try{ wakeLockSentinel.release(); }catch(e){}
+    wakeLockSentinel = null;
+  }
+}
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible' && (sw.running || cd.running)){
+    requestWakeLock();
+    render();
+  }
+});
+
+/* ============================================================
+   FORMATTING
+   ============================================================ */
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+function formatTime(ms, mode){
+  ms = Math.max(0, ms);
+  if(mode === 'countdown' && ms > 0){
+    ms = Math.ceil(ms / 1000) * 1000;
+  }
+  const centis = Math.floor((ms % 1000) / 10);
+  const totalSec = Math.floor(ms / 1000);
+  const sec = totalSec % 60;
+  const min = Math.floor(totalSec / 60) % 60;
+  const hr  = Math.floor(totalSec / 3600);
+
+  let str;
+  const fmt = settings.timeFormat;
+  if(fmt === 'hms'){
+    str = pad2(hr) + ':' + pad2(min) + ':' + pad2(sec);
+  }else if(fmt === 'ms'){
+    const allMin = Math.floor(totalSec / 60);
+    str = pad2(allMin) + ':' + pad2(sec);
+  }else{
+    if(hr > 0){
+      str = pad2(hr) + ':' + pad2(min) + ':' + pad2(sec);
+    }else{
+      str = pad2(min) + ':' + pad2(sec);
+    }
+  }
+  if(mode === 'stopwatch' && settings.showCentiseconds){
+    str += '.' + pad2(centis);
+  }
+  return str;
+}
+
+/* ============================================================
+   MESSAGE HELPERS
+   ============================================================ */
+function pickMsg(msgObj){
+  if(!msgObj) return '';
+  return msgObj[settings.messageStyle] || msgObj.cute || '';
+}
+
+/* ============================================================
+   BUBBLE NOTIFICATION
+   ============================================================ */
+let bubbleTimer = null;
+function notify(text, force){
+  if(!text) return;
+  if(!force && !settings.milestoneMessages) return;
+  bubbleEl.textContent = text;
+  bubbleEl.classList.add('show');
+  clearTimeout(bubbleTimer);
+  bubbleTimer = setTimeout(()=>{
+    bubbleEl.classList.remove('show');
+  }, 4000);
+}
+
+/* ============================================================
+   COUNTDOWN MILESTONES
+   ============================================================ */
+function buildCountdownMilestones(total){
+  const list = [];
+  const push = (at, key, msg) => {
+    if(at > 0 && at < total) list.push({ at, key, msg });
+  };
+
+  if(total >= 30000){
+    push(total * 0.10, 'cd10', MSG.cd10);
+    push(total * 0.25, 'cd25', MSG.cd25);
+    push(total * 0.50, 'cd50', MSG.cd50);
+    push(total * 0.75, 'cd75', MSG.cd75);
+  }
+  if(total >= 600000){
+    [20,30,40,60,70,80,90].forEach(p => {
+      push(total * p / 100, 'pct' + p, percentMsg(p));
+    });
+  }
+  if(total >= 360000) push(total - 300000, 'cd5min', MSG.cd5min);
+  if(total >= 90000)  push(total - 60000,  'cd1min', MSG.cd1min);
+  if(total >= 20000)  push(total - 10000,  'cd10s',  MSG.cd10s);
+
+  list.sort((a,b) => a.at - b.at);
+  return list;
+}
+
+/* ============================================================
+   TIMER ENGINE
+   ============================================================ */
+let rafId = null;
+let lastBurstSecond = null;
+
+function anyRunning(){ return sw.running || cd.running; }
+
+function ensureLoop(){
+  if(rafId === null && anyRunning()){
+    rafId = requestAnimationFrame(loop);
+  }
+}
+
+function loop(){
+  rafId = null;
+  tick();
+  render();
+  if(anyRunning()){
+    rafId = requestAnimationFrame(loop);
+  }
+}
+
+function tick(){
+  const t = nowTs();
+
+  /* --- Stopwatch --- */
+  if(sw.running){
+    const elapsed = sw.base + (t - sw.startTs);
+    let lastFired = null;
+    for(const m of SW_MILESTONES){
+      if(elapsed >= m.at && !sw.fired.has(m.key)){
+        sw.fired.add(m.key);
+        lastFired = m;
+      }
+    }
+    if(lastFired){
+      notify(pickMsg(lastFired.msg));
+      soundMilestone();
+      pulseClock();
+    }
+  }
+
+  /* --- Countdown --- */
+  if(cd.running){
+    const rem = cd.base - (t - cd.startTs);
+    if(rem <= 0){
+      completeCountdown();
+    }else{
+      const elapsed = cd.total - rem;
+      let lastFired = null;
+      for(const m of cd.milestones){
+        if(elapsed >= m.at && !cd.fired.has(m.key)){
+          cd.fired.add(m.key);
+          lastFired = m;
+        }
+      }
+      if(lastFired){
+        notify(pickMsg(lastFired.msg));
+        soundMilestone();
+        pulseClock();
+      }
+    }
+  }
+}
+
+function pulseClock(){
+  if(settings.effects === 'off') return;
+  clockEl.animate(
+    [{ transform:'scale(1)' }, { transform:'scale(1.035)' }, { transform:'scale(1)' }],
+    { duration: 420, easing:'cubic-bezier(.34,1.56,.64,1)' }
+  );
+}
+
+/* ============================================================
+   CONTROLS
+   ============================================================ */
+function startStopwatch(){
+  if(sw.running) return;
+  sw.startTs = nowTs();
+  sw.running = true;
+  soundStart();
+  requestWakeLock();
+  ensureLoop();
+  render();
+}
+
+function pauseStopwatch(){
+  if(!sw.running) return;
+  sw.base = swElapsed();
+  sw.running = false;
+  soundPause();
+  if(!cd.running) releaseWakeLock();
+  render();
+}
+
+function resetStopwatch(){
+  sw.running = false;
+  sw.base = 0;
+  sw.startTs = 0;
+  sw.fired.clear();
+  sw.laps = [];
+  renderLaps();
+  soundReset();
+  if(!cd.running) releaseWakeLock();
+  render();
+}
+
+function addLap(){
+  if(!sw.running && sw.base === 0) return;
+  const elapsed = swElapsed();
+  if(elapsed <= 0) return;
+  const prevAt = sw.laps.length ? sw.laps[0].at : 0;
+  sw.laps.unshift({ n: sw.laps.length + 1, at: elapsed, diff: elapsed - prevAt });
+  if(sw.laps.length > 60) sw.laps.length = 60;
+  renderLaps();
+  soundTick();
+}
+
+function startCountdown(){
+  if(cd.running) return;
+
+  if(cd.completed){
+    cd.completed = false;
+    cd.base = cd.total;
+    cd.started = false;
+    cd.fired.clear();
+  }
+
+  if(cd.base <= 0){
+    notify('Hãy chọn thời gian trước nhé! ⏰', true);
+    clockEl.classList.remove('shake');
+    void clockEl.offsetWidth;
+    clockEl.classList.add('shake');
+    setTimeout(()=>clockEl.classList.remove('shake'), 500);
+    soundReset();
+    return;
+  }
+
+  if(!cd.started){
+    cd.started = true;
+    cd.fired = new Set();
+    cd.milestones = buildCountdownMilestones(cd.total);
+    notify(pickMsg(MSG.cdStart));
+  }
+
+  cd.startTs = nowTs();
+  cd.running = true;
+  soundStart();
+  requestWakeLock();
+  ensureLoop();
+  render();
+}
+
+function pauseCountdown(){
+  if(!cd.running) return;
+  const rem = cdRemaining();
+  cd.running = false;
+
+  if(settings.keepRemainingOnPause){
+    cd.base = rem;
+  }else{
+    cd.base = cd.total;
+    cd.started = false;
+    cd.fired.clear();
+  }
+  soundPause();
+  if(!sw.running) releaseWakeLock();
+  render();
+}
+
+function resetCountdown(){
+  cd.running = false;
+  cd.base = cd.total;
+  cd.started = false;
+  cd.completed = false;
+  cd.fired.clear();
+  cd.milestones = [];
+  soundReset();
+  if(!sw.running) releaseWakeLock();
+  syncInputs();
+  render();
+}
+
+function completeCountdown(){
+  cd.running = false;
+  cd.base = 0;
+  cd.completed = true;
+  cd.started = false;
+  releaseWakeLock();
+
+  notify(pickMsg(MSG.cdDone), true);
+  soundComplete();
+
+  clockEl.classList.remove('done');
+  void clockEl.offsetWidth;
+  clockEl.classList.add('done');
+  setTimeout(()=>clockEl.classList.remove('done'), 1500);
+
+  if(settings.completionEffect) spawnConfetti(26);
+
+  render();
+}
+
+/* ============================================================
+   START / RESET BUTTONS
+   ============================================================ */
+function onStartClick(){
+  if(state.mode === 'stopwatch'){
+    sw.running ? pauseStopwatch() : startStopwatch();
+  }else{
+    if(cd.completed){
+      cd.completed = false;
+      cd.base = cd.total;
+      cd.started = false;
+      cd.fired.clear();
+      startCountdown();
+      return;
+    }
+    cd.running ? pauseCountdown() : startCountdown();
+  }
+}
+
+function onResetClick(){
+  if(state.mode === 'stopwatch'){
+    resetStopwatch();
+    notify('Đã đặt lại bấm giờ ↺', true);
+  }else{
+    resetCountdown();
+    notify('Đã đặt lại hẹn giờ ↺', true);
+  }
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render(){
+  const isSW = state.mode === 'stopwatch';
+  const running = isSW ? sw.running : cd.running;
+
+  /* ---- Time ---- */
+  const rawMs = isSW ? swElapsed() : cdRemaining();
+  timeDisplay.textContent = formatTime(rawMs, isSW ? 'stopwatch' : 'countdown');
+
+  /* ---- Labels ---- */
+  if(isSW){
+    clockLabel.textContent = 'BẤM GIỜ';
+    clockSub.textContent = sw.running ? 'đang chạy…' : (sw.base > 0 ? 'đã tạm dừng' : 'đã trôi qua');
+  }else{
+    clockLabel.textContent = 'HẸN GIỜ';
+    if(cd.completed) clockSub.textContent = 'hoàn thành 🎉';
+    else if(cd.running) clockSub.textContent = 'còn lại';
+    else if(cd.started) clockSub.textContent = 'đã tạm dừng';
+    else clockSub.textContent = 'còn lại';
+  }
+
+  /* ---- Ring ---- */
+  let progress;
+  if(isSW){
+    progress = (rawMs % 60000) / 60000;
+  }else{
+    progress = cd.total > 0 ? Math.min(1, Math.max(0, rawMs / cd.total)) : 0;
+  }
+  if(!isSW && cd.completed) progress = 0;
+
+  if(settings.showRing){
+    ringEl.style.opacity = '1';
+    ringBar.style.strokeDashoffset = String(RING_C * (1 - progress));
+  }else{
+    ringEl.style.opacity = '0';
+  }
+  progressFill.style.width = (progress * 100).toFixed(2) + '%';
+
+  /* ---- Clock state classes ---- */
+  clockEl.classList.toggle('running', running);
+
+  /* ---- Urgent countdown (last 10s) ---- */
+  const urgent = !isSW && cd.running && rawMs <= 10000 && rawMs > 0;
+  clockEl.classList.toggle('urgent', urgent);
+  if(urgent){
+    const sec = Math.ceil(rawMs / 1000);
+    if(sec !== lastBurstSecond){
+      lastBurstSecond = sec;
+      burstNumber.textContent = String(sec);
+      burstNumber.classList.remove('show');
+      void burstNumber.offsetWidth;
+      burstNumber.classList.add('show');
+      if(sec <= 3) soundTick();
+    }
+  }else{
+    lastBurstSecond = null;
+    burstNumber.classList.remove('show');
+  }
+
+  /* ---- Buttons ---- */
+  if(isSW){
+    if(sw.running) startBtn.textContent = '⏸ Tạm dừng';
+    else if(sw.base > 0) startBtn.textContent = '▶ Tiếp tục';
+    else startBtn.textContent = '▶ Bắt đầu';
+    startBtn.disabled = false;
+  }else{
+    if(cd.completed) startBtn.textContent = '🔁 Đếm lại';
+    else if(cd.running) startBtn.textContent = '⏸ Tạm dừng';
+    else if(cd.started && cd.base > 0) startBtn.textContent = '▶ Tiếp tục';
+    else startBtn.textContent = '▶ Bắt đầu';
+    startBtn.disabled = false;
+  }
+
+  /* ---- Visibility of sections ---- */
+  lapBtn.hidden = !isSW;
+  lapBtn.disabled = !isSW || (!sw.running && sw.base === 0);
+
+  quickPicks.hidden = isSW;
+  customTime.hidden = isSW;
+  lapsWrap.hidden = isSW || !settings.showLaps;
+
+  if(!isSW){
+    const locked = cd.running || cd.started;
+    customTime.classList.toggle('disabled', locked);
+    Array.from(quickPicks.children).forEach(chip=>{
+      chip.disabled = locked;
+      chip.classList.toggle('active', !locked && Number(chip.dataset.ms) === cd.total && cd.total > 0);
+    });
+  }
+}
+
+/* ============================================================
+   LAPS RENDER
+   ============================================================ */
+function renderLaps(){
+  if(!lapList) return;
+  lapList.innerHTML = sw.laps.map(l =>
+    `<li>
+       <span class="lap-n">#${l.n}</span>
+       <span class="lap-diff">+${formatTime(l.diff, 'stopwatch')}</span>
+       <span class="lap-total">${formatTime(l.at, 'stopwatch')}</span>
+     </li>`
+  ).join('');
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function spawnConfetti(count){
+  const emojis = ['🎉','✨','💖','⭐','🎊','🌟','💫','🎈'];
+  const n = settings.effects === 'light' ? Math.ceil(count / 2) : count;
+  for(let i = 0; i < n; i++){
+    const el = document.createElement('span');
+    el.className = 'fx-piece';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = (Math.random() * 96) + 'vw';
+    el.style.fontSize = (16 + Math.random() * 22) + 'px';
+    el.style.animationDuration = (1.9 + Math.random() * 1.9) + 's';
+    el.style.animationDelay = (Math.random() * 0.5) + 's';
+    fxLayer.appendChild(el);
+    setTimeout(()=>{ el.remove(); }, 4600);
+  }
+}
+
+/* ============================================================
+   DECOR
+   ============================================================ */
+function buildDecor(){
+  const list = DECOR_EMOJI[settings.theme] || [];
+  if(settings.effects === 'off' || list.length === 0){
+    decorEl.innerHTML = '';
+    return;
+  }
+  const count = settings.effects === 'full' ? 14 : 7;
+  const parts = [];
+  for(let i = 0; i < count; i++){
+    const emoji = list[i % list.length];
+    const left = ((i * 97 + 13) % 90) + 4;
+    const top  = ((i * 53 + 7) % 86) + 5;
+    const size = 17 + ((i * 7) % 20);
+    const dur  = 7 + ((i * 3) % 8);
+    const delay = -((i * 1.7) % 10);
+    parts.push(
+      `<span class="d" style="left:${left}%;top:${top}%;font-size:${size}px;` +
+      `animation-duration:${dur}s;animation-delay:${delay}s">${emoji}</span>`
+    );
+  }
+  decorEl.innerHTML = parts.join('');
+}
+
+/* ============================================================
+   THEME / SETTINGS APPLICATION
+   ============================================================ */
+function applySettings(){
+  htmlEl.setAttribute('data-theme', settings.theme);
+  htmlEl.setAttribute('data-scheme', settings.scheme);
+  htmlEl.setAttribute('data-effects', settings.effects);
+
+  /* tagline per theme */
+  const taglines = {
+    anime:'Đếm thời gian thật dễ thương 🌸',
+    pastel:'Nhẹ nhàng và mềm mại ☁️',
+    ghibli:'Một chút thiên nhiên thơ mộng 🌿',
+    cyber:'Neon sáng, thời gian chính xác ⚡',
+    galaxy:'Trôi giữa những vì sao 🌌',
+    cafe:'Một tách cà phê và vài phút bình yên ☕',
+    y2k:'Ngôi sao bốn cánh và ánh kim 💿',
+    ocean:'Sóng nhẹ và bong bóng xanh 🌊',
+    academia:'Thời gian trôi như trang sách cũ 📚',
+    jelly:'Thế giới thạch ngọt ngào 🍬'
+  };
+  tagline.textContent = taglines[settings.theme] || 'Đếm thời gian thật dễ thương';
+
+  buildDecor();
+  syncSettingsUI();
+  render();
+}
+
+/* ============================================================
+   SETTINGS UI
+   ============================================================ */
+function buildThemeGrid(){
+  themeGrid.innerHTML = THEME_LIST.map(t => `
+    <button type="button" class="theme-card ${settings.theme === t.id ? 'active' : ''}" data-theme-id="${t.id}">
+      <span class="tc-preview" style="background:linear-gradient(135deg,${t.colors[0]} 0%,${t.colors[1]} 62%,${t.colors[2]} 100%)">
+        <span>${t.emoji}</span>
+      </span>
+      <span class="tc-name">${t.name}</span>
+    </button>
+  `).join('');
+}
+
+function setSegmented(container, value){
+  Array.from(container.children).forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.value === value);
+  });
+}
+
+function syncSettingsUI(){
+  /* Theme cards */
+  Array.from(themeGrid.children).forEach(card => {
+    card.classList.toggle('active', card.dataset.themeId === settings.theme);
+  });
+
+  setSegmented($('schemeSeg'), settings.scheme);
+  setSegmented($('effectsSeg'), settings.effects);
+
+  $('setMilestone').checked = settings.milestoneMessages;
+  $('setStyle').value = settings.messageStyle;
+  $('setSound').checked = settings.sound;
+  $('setVolume').value = settings.volume;
+  $('setConfetti').checked = settings.completionEffect;
+
+  $('setFormat').value = settings.timeFormat;
+  $('setCs').checked = settings.showCentiseconds;
+  $('setRing').checked = settings.showRing;
+  $('setLaps').checked = settings.showLaps;
+  $('setKeep').checked = settings.keepRemainingOnPause;
+
+  $('setWake').checked = settings.wakeLock;
+}
+
+/* ============================================================
+   QUICK PICKS
+   ============================================================ */
+function buildQuickPicks(){
+  quickPicks.innerHTML = QUICK_MINUTES.map(m => {
+    const label = m === 60 ? '1 giờ' : m + ' phút';
+    return `<button type="button" class="chip" data-ms="${m * 60000}">${label}</button>`;
+  }).join('');
+}
+
+quickPicks.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  if(cd.running || cd.started) return;
+  setCountdownTotal(Number(chip.dataset.ms));
+  soundTick();
+});
+
+/* ============================================================
+   COUNTDOWN TOTAL / INPUTS
+   ============================================================ */
+function setCountdownTotal(ms){
+  ms = Math.max(0, Math.min(99 * 3600 * 1000 + 59 * 60000 + 59000, ms));
+  cd.total = ms;
+  cd.base = ms;
+  cd.completed = false;
+  cd.started = false;
+  cd.running = false;
+  cd.fired.clear();
+  syncInputs();
+  render();
+}
+
+function syncInputs(){
+  const totalSec = Math.round(cd.total / 1000);
+  inH.value = Math.floor(totalSec / 3600);
+  inM.value = Math.floor(totalSec / 60) % 60;
+  inS.value = totalSec % 60;
+}
+
+function clampInt(v, min, max){
+  let n = parseInt(v, 10);
+  if(isNaN(n)) n = 0;
+  return Math.max(min, Math.min(max, n));
+}
+
+function readInputsToTotal(){
+  const h = clampInt(inH.value, 0, 99);
+  const m = clampInt(inM.value, 0, 59);
+  const s = clampInt(inS.value, 0, 59);
+  return (h * 3600 + m * 60 + s) * 1000;
+}
+
+[inH, inM, inS].forEach(inp => {
+  inp.addEventListener('input', () => {
+    if(cd.running || cd.started) return;
+    cd.total = readInputsToTotal();
+    cd.base = cd.total;
+    cd.completed = false;
+    render();
+  });
+  inp.addEventListener('blur', () => {
+    inH.value = clampInt(inH.value, 0, 99);
+    inM.value = clampInt(inM.value, 0, 59);
+    inS.value = clampInt(inS.value, 0, 59);
+    if(!cd.running && !cd.started){
+      cd.total = readInputsToTotal();
+      cd.base = cd.total;
+    }
+    render();
+  });
+});
+
+/* ============================================================
+   MODE SWITCHING
+   ============================================================ */
+function setMode(mode){
+  if(state.mode === mode) return;
+
+  /* Pause the timer we're leaving so nothing runs invisibly */
+  if(mode === 'countdown' && sw.running){
+    pauseStopwatch();
+    notify('Đã tạm dừng bấm giờ khi chuyển chế độ ⏸', true);
+  }
+  if(mode === 'stopwatch' && cd.running){
+    pauseCountdown();
+    notify('Đã tạm dừng hẹn giờ khi chuyển chế độ ⏸', true);
+  }
+
+  state.mode = mode;
+  document.body.dataset.mode = mode;
+
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    const active = btn.dataset.mode === mode;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+
+  render();
+  ensureLoop();
+}
+
+/* ============================================================
+   MODAL OPEN / CLOSE
+   ============================================================ */
+let lastFocused = null;
+
+function openModal(){
+  lastFocused = document.activeElement;
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  const panel = modal.querySelector('.modal-panel');
+  setTimeout(()=>{ try{ panel.focus(); }catch(e){} }, 30);
+}
+
+function closeModal(){
+  if(modal.hidden) return;
+  modal.hidden = true;
+  document.body.style.overflow = '';
+  if(lastFocused && typeof lastFocused.focus === 'function'){
+    try{ lastFocused.focus(); }catch(e){}
+  }
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+startBtn.addEventListener('click', onStartClick);
+resetBtn.addEventListener('click', onResetClick);
+lapBtn.addEventListener('click', addLap);
+clearLapsBtn.addEventListener('click', () => {
+  sw.laps = [];
+  renderLaps();
+});
+settingsBtn.addEventListener('click', openModal);
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => setMode(btn.dataset.mode));
+});
+
+/* Modal close */
+modal.addEventListener('click', (e) => {
+  if(e.target.closest('[data-close]')) closeModal();
+});
+
+/* Theme selection */
+themeGrid.addEventListener('click', (e) => {
+  const card = e.target.closest('.theme-card');
+  if(!card) return;
+  settings.theme = card.dataset.themeId;
+  saveSettings();
+  applySettings();
+  soundTick();
+});
+
+/* Segmented controls */
+$('schemeSeg').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-value]');
+  if(!b) return;
+  settings.scheme = b.dataset.value;
+  saveSettings();
+  applySettings();
+});
+$('effectsSeg').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-value]');
+  if(!b) return;
+  settings.effects = b.dataset.value;
+  saveSettings();
+  applySettings();
+});
+
+/* Checkboxes & selects */
+$('setMilestone').addEventListener('change', (e) => {
+  settings.milestoneMessages = e.target.checked; saveSettings();
+});
+$('setStyle').addEventListener('change', (e) => {
+  settings.messageStyle = e.target.value; saveSettings();
+});
+$('setSound').addEventListener('change', (e) => {
+  settings.sound = e.target.checked;
+  saveSettings();
+  if(settings.sound) soundMilestone();
+});
+$('setVolume').addEventListener('input', (e) => {
+  settings.volume = Number(e.target.value);
+  saveSettings();
+});
+$('setVolume').addEventListener('change', () => {
+  if(settings.sound) soundMilestone();
+});
+$('setConfetti').addEventListener('change', (e) => {
+  settings.completionEffect = e.target.checked; saveSettings();
+});
+$('setFormat').addEventListener('change', (e) => {
+  settings.timeFormat = e.target.value; saveSettings(); render();
+});
+$('setCs').addEventListener('change', (e) => {
+  settings.showCentiseconds = e.target.checked; saveSettings(); render();
+});
+$('setRing').addEventListener('change', (e) => {
+  settings.showRing = e.target.checked; saveSettings(); render();
+});
+$('setLaps').addEventListener('change', (e) => {
+  settings.showLaps = e.target.checked; saveSettings(); render();
+});
+$('setKeep').addEventListener('change', (e) => {
+  settings.keepRemainingOnPause = e.target.checked; saveSettings();
+});
+$('setWake').addEventListener('change', (e) => {
+  settings.wakeLock = e.target.checked; saveSettings();
+  if(settings.wakeLock && anyRunning()) requestWakeLock();
+  if(!settings.wakeLock) releaseWakeLock();
+});
+
+/* Reset all */
+$('resetAll').addEventListener('click', () => {
+  settings = Object.assign({}, DEFAULT_SETTINGS);
+  saveSettings();
+  applySettings();
+  buildThemeGrid();
+  setCountdownTotal(5 * 60000);
+  resetStopwatch();
+  resetCountdown();
+  notify('Đã khôi phục cài đặt mặc định ✨', true);
+  soundStart();
+});
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', (e) => {
+  if(!modal.hidden){
+    if(e.key === 'Escape'){ e.preventDefault(); closeModal(); }
+    return;
+  }
+  const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+  if(tag === 'input' || tag === 'select' || tag === 'textarea') return;
+
+  if(e.code === 'Space'){
+    e.preventDefault();
+    onStartClick();
+  }else if(e.key === 'r' || e.key === 'R'){
+    if(e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    onResetClick();
+  }else if(e.key === 'l' || e.key === 'L'){
+    if(e.ctrlKey || e.metaKey) return;
+    if(state.mode === 'stopwatch'){
+      e.preventDefault();
+      addLap();
+    }
+  }else if(e.key === 'Escape'){
+    closeModal();
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  buildThemeGrid();
+  buildQuickPicks();
+  applySettings();
+
+  cd.total = 5 * 60000;
+  cd.base = cd.total;
+  syncInputs();
+
+  document.body.dataset.mode = state.mode;
+  render();
+  renderLaps();
+
+  /* Warm up audio on first interaction */
+  const warm = () => {
+    getAudioCtx();
+    document.removeEventListener('pointerdown', warm);
+    document.removeEventListener('keydown', warm);
+  };
+  document.addEventListener('pointerdown', warm, { once:true });
+  document.addEventListener('keydown', warm, { once:true });
+
+  /* Greeting */
+  setTimeout(()=>{
+    notify('Chào bạn! Chọn chế độ và bắt đầu đếm thời gian nhé ✨', true);
+  }, 500);
+}
+
+init();
+
+/* Safety: make sure the loop restarts if the page is restored */
+window.addEventListener('pageshow', () => {
+  ensureLoop();
+  render();
+});
+</script>
+</body>
+</html>
